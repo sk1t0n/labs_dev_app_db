@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+
+{% block title %}Show tables{% endblock %}
+{% block content %}
+	<h2>SHOW TABLES FROM {{ dbname }}</h2>
+	<ul class="list-group">
+	{% for table in tables %}
+		<li class="list-group-item"><a href="/db/{{ dbname }}/table/{{ table[key] }}">{{ table[key] }}</a></li>
+	{% endfor %}
+	</ul>
+{% endblock %}

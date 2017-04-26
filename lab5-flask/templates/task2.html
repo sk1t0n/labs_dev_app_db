@@ -1,0 +1,78 @@
+﻿{% extends 'base.html' %}
+
+{% block title %}Select pers{% endblock %}
+{% block content %}
+<script type = "text/javascript" src = "{{ url_for('static', filename = 'js/highcharts.js') }}" ></script>
+<script type = "text/javascript" src = "{{ url_for('static', filename = 'js/exporting.js') }}" ></script>
+
+<div id="container"></div>
+{% if data|length > 0 %}
+<script>
+	Highcharts.chart('container', {
+
+    title: {
+        text: 'Максимальные недельные характеристики всех персонажей по уровням'
+    },
+    xAxis: {
+        categories: [{{ data['dates']|safe }}]
+    },
+    yAxis: {
+        title: {
+            text: 'Значение характеристик'
+        }
+    },
+    legend: {
+        layout: 'vertical',
+        align: 'right',
+        verticalAlign: 'middle'
+    },
+
+    series: [{
+        name: 'health0',
+        data: [{{ data['healths0'] }}]
+    }, {
+        name: 'power0',
+        data: [{{ data['powers0'] }}]
+    }, {
+        name: 'agility0',
+        data: [{{ data['agilitys0'] }}]
+    }, {
+        name: 'stamina0',
+        data: [{{ data['staminas0'] }}]
+    }, {
+        name: 'cunning0',
+        data: [{{ data['cunnings0'] }}]
+    }, {
+        name: 'attention0',
+        data: [{{ data['attentions0'] }}]
+    }, {
+        name: 'charism0',
+        data: [{{ data['charisms0'] }}]
+    }, {
+        name: 'health',
+        data: [{{ data['healths'] }}]
+    }, {
+        name: 'power',
+        data: [{{ data['powers'] }}]
+    }, {
+        name: 'agility',
+        data: [{{ data['agilitys'] }}]
+    }, {
+        name: 'stamina',
+        data: [{{ data['staminas'] }}]
+    }, {
+        name: 'cunning',
+        data: [{{ data['cunnings'] }}]
+    }, {
+        name: 'attention',
+        data: [{{ data['attentions'] }}]
+    }, {
+        name: 'charism',
+        data: [{{ data['charisms'] }}]
+    }]
+	});
+</script>
+{% else %}
+<h2>Ничего не найдено</h2>
+{% endif %}
+{% endblock %}

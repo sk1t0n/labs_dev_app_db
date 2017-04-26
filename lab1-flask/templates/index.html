@@ -1,0 +1,11 @@
+﻿{% extends 'base.html' %}
+
+{% block title %}Show databases{% endblock %}
+{% block content %}
+	<h2>SHOW DATABASES</h2>
+	<ul class="list-group">
+	{% for db in databases %}
+		<li class="list-group-item"><a href="/db/{{ db['Database'] }}">{{ db['Database'] }}</a></li>
+	{% endfor %}
+	</ul>
+{% endblock %}

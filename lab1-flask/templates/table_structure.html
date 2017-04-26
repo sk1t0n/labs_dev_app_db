@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block title %}Describe {{ tablename }}{% endblock %}
+{% block content %}
+	<h2>DESCRIBE {{ tablename }}</h2>
+	<table class="table table-bordered">
+		<thead>
+			<tr>
+				<th>Field</th>
+				<th>Type</th>
+				<th>Null</th>
+				<th>Key</th>
+				<th>Default</th>
+				<th>Extra</th>
+			</tr>
+		</thead>
+		<tbody>
+		{% for row in rows %}
+		<tr>
+			<td>{{ row['Field'] }}</td>
+			<td>{{ row['Type'] }}</td>
+			<td>{{ row['Null'] }}</td>
+			<td>{{ row['Key'] }}</td>
+			<td>{{ row['Default'] }}</td>
+			<td>{{ row['Extra'] }}</td>
+		</tr>
+		{% endfor %}
+		</tbody>
+	</table>
+	<a href="{{ path }}/rows/1"><button type="button" class="btn btn-default">Rows <span class="glyphicon glyphicon-list-alt"></span></button></a>
+{% endblock %}

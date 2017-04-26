@@ -1,0 +1,45 @@
+﻿{% extends 'base.html' %}
+
+{% block title %}Task 3{% endblock %}
+{% block content %}
+<script type = "text/javascript" src = "{{ url_for('static', filename = 'js/highcharts.js') }}" ></script>
+<script type = "text/javascript" src = "{{ url_for('static', filename = 'js/exporting.js') }}" ></script>
+
+<div id="container"></div>
+{% if data|length > 0 %}
+<script>
+	Highcharts.chart('container', {
+
+    title: {
+        text: 'Сумма ресурсов заработанных кланом /clan/{{ clan_name }}/ к концу недели'
+    },
+    xAxis: {
+        categories: [{{ data['dates']|safe }}]
+    },
+    yAxis: {
+        title: {
+            text: 'Значение характеристик'
+        }
+    },
+    legend: {
+        layout: 'vertical',
+        align: 'right',
+        verticalAlign: 'middle'
+    },
+
+    series: [{
+        name: 'tugrs',
+        data: [{{ data['tugrs'] }}]
+    }, {
+        name: 'ruda',
+        data: [{{ data['ruda'] }}]
+    }, {
+        name: 'oils',
+        data: [{{ data['oils'] }}]
+    }]
+	});
+</script>
+{% else %}
+<h2>Ничего не найдено</h2>
+{% endif %}
+{% endblock %}

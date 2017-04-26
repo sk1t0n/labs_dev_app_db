@@ -1,0 +1,21 @@
+﻿{% extends 'base.html' %}
+
+{% block title %}Info{% endblock %}
+{% block content %}
+	<div style="position: relative; float: left; margin-right: 50px">
+	Персонажи
+	<ul>
+	{% for name in pers %}
+		<li>{{ name['name'] }}</li>
+	{% endfor %}
+	</ul>
+	</div>
+	<div style="position: relative; float: left;">
+	Победившие кланы
+	<ul>
+	{% for name in clans %}
+		<li>{{ name['id_winner'] }}</li>
+	{% endfor %}
+	</ul>
+	</div>
+{% endblock %}
