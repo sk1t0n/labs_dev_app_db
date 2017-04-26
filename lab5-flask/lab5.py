@@ -27,6 +27,48 @@ def info():
     clans = cursor.fetchall()
     return render_template('info.html', pers=pers, clans=clans)
 
+def task1_data_append(data, rows, idx):
+    data.append((str(rows[idx]['date']), rows[idx]['health'],rows[idx]['power'], 
+        rows[idx]['agility'], rows[idx]['stamina'], rows[idx]['cunning'], 
+        rows[idx]['attention'], rows[idx]['charism'], rows[idx]['health0'], 
+        rows[idx]['power0'], rows[idx]['agility0'], rows[idx]['stamina0'], 
+        rows[idx]['cunning0'], rows[idx]['attention0'], rows[idx]['charism0']))
+
+def get_attrs_pers(data):
+    healths0 = ','.join([str(data[i][1]) for i in range(len(data))])
+    powers0 = ','.join([str(data[i][2]) for i in range(len(data))])
+    agilitys0 = ','.join([str(data[i][3]) for i in range(len(data))])
+    staminas0 = ','.join([str(data[i][4]) for i in range(len(data))])
+    cunnings0 = ','.join([str(data[i][5]) for i in range(len(data))])
+    attentions0 = ','.join([str(data[i][6]) for i in range(len(data))])
+    charisms0 = ','.join([str(data[i][7]) for i in range(len(data))])
+    healths = ','.join([str(data[i][8]) for i in range(len(data))])
+    powers = ','.join([str(data[i][9]) for i in range(len(data))])
+    agilitys = ','.join([str(data[i][10]) for i in range(len(data))])
+    staminas = ','.join([str(data[i][11]) for i in range(len(data))])
+    cunnings = ','.join([str(data[i][12]) for i in range(len(data))])
+    attentions = ','.join([str(data[i][13]) for i in range(len(data))])
+    charisms = ','.join([str(data[i][14]) for i in range(len(data))])
+
+    data = {
+        'healths0': healths0,
+        'powers0': powers0,
+        'agilitys0': agilitys0,
+        'staminas0': staminas0,
+        'cunnings0': cunnings0,
+        'attentions0': attentions0,
+        'charisms0': charisms0,
+        'healths': healths,
+        'powers': powers,
+        'agilitys': agilitys,
+        'staminas': staminas,
+        'cunnings': cunnings,
+        'attentions': attentions,
+        'charisms': charisms
+    }
+
+    return data
+
 @app.route('/task1/<pers_name>')
 def task1(pers_name):
     data = []
@@ -41,56 +83,16 @@ def task1(pers_name):
     if rows:
         for i in range(len(rows)-1):
             if rows[i]['week'] != rows[i+1]['week']:
-                data.append((str(rows[i]['date']), rows[i]['health'], rows[i]['power'], 
-                    rows[i]['agility'], rows[i]['stamina'], rows[i]['cunning'], rows[i]['attention'], 
-                    rows[i]['charism'], rows[i]['health0'], rows[i]['power0'], rows[i]['agility0'], 
-                    rows[i]['stamina0'], rows[i]['cunning0'], rows[i]['attention0'], rows[i]['charism0']))
-
+                task1_data_append(data, rows, i)
         if len(rows) > 1:
             if rows[-2]['week'] != rows[-1]['week']:
-                data.append((str(rows[-1]['date']), rows[-1]['health'], rows[-1]['power'], 
-                        rows[-1]['agility'], rows[-1]['stamina'], rows[-1]['cunning'], rows[-1]['attention'], 
-                        rows[-1]['charism'], rows[-1]['health0'], rows[-1]['power0'], rows[-1]['agility0'], 
-                        rows[-1]['stamina0'], rows[-1]['cunning0'], rows[-1]['attention0'], rows[-1]['charism0']))
+                task1_data_append(data, rows, -1)
         else:
-            data.append((str(rows[-1]['date']), rows[-1]['health'], rows[-1]['power'], 
-                rows[-1]['agility'], rows[-1]['stamina'], rows[-1]['cunning'], rows[-1]['attention'], 
-                rows[-1]['charism'], rows[-1]['health0'], rows[-1]['power0'], rows[-1]['agility0'], 
-                rows[-1]['stamina0'], rows[-1]['cunning0'], rows[-1]['attention0'], rows[-1]['charism0']))
+            task1_data_append(data, rows, -1)
 
         dates = ','.join(['"'+str(data[i][0])+'"' for i in range(len(data))])
-        healths0 = ','.join([str(data[i][1]) for i in range(len(data))])
-        powers0 = ','.join([str(data[i][2]) for i in range(len(data))])
-        agilitys0 = ','.join([str(data[i][3]) for i in range(len(data))])
-        staminas0 = ','.join([str(data[i][4]) for i in range(len(data))])
-        cunnings0 = ','.join([str(data[i][5]) for i in range(len(data))])
-        attentions0 = ','.join([str(data[i][6]) for i in range(len(data))])
-        charisms0 = ','.join([str(data[i][7]) for i in range(len(data))])
-        healths = ','.join([str(data[i][8]) for i in range(len(data))])
-        powers = ','.join([str(data[i][9]) for i in range(len(data))])
-        agilitys = ','.join([str(data[i][10]) for i in range(len(data))])
-        staminas = ','.join([str(data[i][11]) for i in range(len(data))])
-        cunnings = ','.join([str(data[i][12]) for i in range(len(data))])
-        attentions = ','.join([str(data[i][13]) for i in range(len(data))])
-        charisms = ','.join([str(data[i][14]) for i in range(len(data))])
-
-        data = {
-            'dates': dates,
-            'healths0': healths0,
-            'powers0': powers0,
-            'agilitys0': agilitys0,
-            'staminas0': staminas0,
-            'cunnings0': cunnings0,
-            'attentions0': attentions0,
-            'charisms0': charisms0,
-            'healths': healths,
-            'powers': powers,
-            'agilitys': agilitys,
-            'staminas': staminas,
-            'cunnings': cunnings,
-            'attentions': attentions,
-            'charisms': charisms
-        }
+        data = get_attrs_pers(data)
+        data['dates'] = dates
 
     return render_template('task1.html', pers_name=pers_name, data=data)
 
@@ -130,51 +132,27 @@ def task2():
             row_week_level = cursor.fetchone()
             if row_week_level:
                 data.append((
-                    str(row_week_level['date']), row_week_level['MAX(`health`)'], row_week_level['MAX(`power`)'], 
-                    row_week_level['MAX(`agility`)'], row_week_level['MAX(`stamina`)'], 
-                    row_week_level['MAX(`cunning`)'], row_week_level['MAX(`attention`)'], 
-                    row_week_level['MAX(`charism`)'], row_week_level['MAX(`health0`)'], 
-                    row_week_level['MAX(`power0`)'], row_week_level['MAX(`agility0`)'], 
-                    row_week_level['MAX(`stamina0`)'], row_week_level['MAX(`cunning0`)'], 
-                    row_week_level['MAX(`attention0`)'], row_week_level['MAX(`charism0`)'], num_level
+                    str(row_week_level['date']), row_week_level['MAX(`health`)'], 
+                    row_week_level['MAX(`power`)'], row_week_level['MAX(`agility`)'], 
+                    row_week_level['MAX(`stamina`)'], row_week_level['MAX(`cunning`)'], 
+                    row_week_level['MAX(`attention`)'], row_week_level['MAX(`charism`)'], 
+                    row_week_level['MAX(`health0`)'], row_week_level['MAX(`power0`)'], 
+                    row_week_level['MAX(`agility0`)'], row_week_level['MAX(`stamina0`)'], 
+                    row_week_level['MAX(`cunning0`)'], row_week_level['MAX(`attention0`)'], 
+                    row_week_level['MAX(`charism0`)'], num_level
                 ))
 
     if len(data) > 0:
-        dates = ','.join(['"Уровень {0} - '.format(data[i][-1]) + str(data[i][0])+'"' for i in range(len(data))])
-        healths0 = ','.join([str(data[i][1]) for i in range(len(data))])
-        powers0 = ','.join([str(data[i][2]) for i in range(len(data))])
-        agilitys0 = ','.join([str(data[i][3]) for i in range(len(data))])
-        staminas0 = ','.join([str(data[i][4]) for i in range(len(data))])
-        cunnings0 = ','.join([str(data[i][5]) for i in range(len(data))])
-        attentions0 = ','.join([str(data[i][6]) for i in range(len(data))])
-        charisms0 = ','.join([str(data[i][7]) for i in range(len(data))])
-        healths = ','.join([str(data[i][8]) for i in range(len(data))])
-        powers = ','.join([str(data[i][9]) for i in range(len(data))])
-        agilitys = ','.join([str(data[i][10]) for i in range(len(data))])
-        staminas = ','.join([str(data[i][11]) for i in range(len(data))])
-        cunnings = ','.join([str(data[i][12]) for i in range(len(data))])
-        attentions = ','.join([str(data[i][13]) for i in range(len(data))])
-        charisms = ','.join([str(data[i][14]) for i in range(len(data))])
-
-        data = {
-            'dates': dates,
-            'healths0': healths0,
-            'powers0': powers0,
-            'agilitys0': agilitys0,
-            'staminas0': staminas0,
-            'cunnings0': cunnings0,
-            'attentions0': attentions0,
-            'charisms0': charisms0,
-            'healths': healths,
-            'powers': powers,
-            'agilitys': agilitys,
-            'staminas': staminas,
-            'cunnings': cunnings,
-            'attentions': attentions,
-            'charisms': charisms
-        }
+        dates = ','.join(['"Уровень {0} - '.format(data[i][-1]) + 
+            str(data[i][0]) + '"' for i in range(len(data))])
+        data = get_attrs_pers(data)
+        data['dates'] = dates
 
     return render_template('task2.html', data=data)
+
+def task3_data_append(data, rows, idx, sum_tugr, sum_ruda, sum_oil):
+    data.append((str(rows[idx]['first_date']), str(rows[idx]['last_date']), 
+                    sum_tugr, sum_ruda, sum_oil))
 
 @app.route('/task3/<clan_name>')
 def task3(clan_name):
@@ -199,25 +177,21 @@ def task3(clan_name):
                 sum_ruda += rows[i+1]['ruda']
                 sum_oil += rows[i+1]['oil']
             else:
-                data.append((str(rows[i]['first_date']), str(rows[i]['last_date']), 
-                    sum_tugr, sum_ruda, sum_oil))
+                task3_data_append(data, rows, i, sum_tugr, sum_ruda, sum_oil)
                 sum_tugr = rows[i+1]['tugr']
                 sum_ruda = rows[i+1]['ruda']
                 sum_oil = rows[i+1]['oil']
 
         if len(rows) > 1:
             if rows[-2]['week'] == rows[-1]['week']:
-                data.append((str(rows[-1]['first_date']), str(rows[-1]['last_date']), 
-                    sum_tugr, sum_ruda, sum_oil))
+                task3_data_append(data, rows, -1, sum_tugr, sum_ruda, sum_oil)
             else:
                 sum_tugr = rows[-1]['tugr']
                 sum_ruda = rows[-1]['ruda']
                 sum_oil = rows[-1]['oil']
-                data.append((str(rows[-1]['first_date']), str(rows[-1]['last_date']), 
-                    sum_tugr, sum_ruda, sum_oil))
+                task3_data_append(data, rows, -1, sum_tugr, sum_ruda, sum_oil)
         else:
-            data.append((str(rows[-1]['first_date']), str(rows[-1]['last_date']), 
-                    sum_tugr, sum_ruda, sum_oil))
+            task3_data_append(data, rows, -1, sum_tugr, sum_ruda, sum_oil)
 
         dates = ','.join(['"'+str(data[i][1])+'"' for i in range(len(data))])
         tugrs = ','.join([str(data[i][2]) for i in range(len(data))])
